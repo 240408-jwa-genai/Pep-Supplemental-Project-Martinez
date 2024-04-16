@@ -4,19 +4,23 @@
 PRAGMA foreign_keys = 1;
 
 create table users(
-	id serial primary key,
-	username varchar(20) unique,
-	password varchar(20)
+	id integer primary key,
+	username text unique,
+	password text
 );
 
 create table planets(
-	id serial primary key,
-	name varchar(20),
+	id integer primary key,
+	name text,
 	ownerId int references users(id)
 );
 
 create table moons(
-	id serial primary key,
-	name varchar(20),
+	id integer primary key,
+	name text,
 	myPlanetId int references planets(id)
 );
+
+INSERT INTO users (username, password) values ();
+DELETE FROM planets;
+INSERT INTO planets (id,name, ownerId) values (1, "Mars",1);

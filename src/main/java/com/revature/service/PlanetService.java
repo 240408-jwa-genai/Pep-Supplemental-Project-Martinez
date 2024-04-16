@@ -1,5 +1,6 @@
 package com.revature.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.models.Planet;
@@ -13,14 +14,15 @@ public class PlanetService {
 		this.dao = dao;
 	}
 
-	public List<Planet> getAllPlanets() {
+	public List<Planet> getAllPlanets(int userId) {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.getAllPlanets(userId);
 	}
 
 	public Planet getPlanetByName(int ownerId, String planetName) {
 		// TODO Auto-generated method stub
-		return null;
+
+		return dao.getPlanetByName(planetName, ownerId);
 	}
 
 	public Planet getPlanetById(int ownerId, int planetId) {
@@ -30,7 +32,29 @@ public class PlanetService {
 
 	public Planet createPlanet(int ownerId, Planet planet) {
 		// TODO Auto-generated method stub
-		return null;
+		//first, make sure that the planet name meets criteria
+		if(planet.getName().length() <= 30)
+		{
+			//check if planet name exists
+			Planet planetDup = dao.getPlanetByName(planet.getName(), ownerId);
+			//if returned object is null, then something went wrong with the request
+			if(planetDup != null)
+			{
+				String nameFromDb = planetDup.getName();
+				String givenName = planet.getName();
+				//now check if they have the same name
+				if(!givenName.equals(nameFromDb))
+				{
+					//associate planet with current user
+					planet.setOwnerId(ownerId);
+					//if not create the planet from given planet
+					return dao.createPlanet(planet);
+				}
+			}
+
+		}
+
+		return new Planet();
 	}
 
 	public boolean deletePlanetById(int planetId) {

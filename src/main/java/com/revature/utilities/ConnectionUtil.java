@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConnectionUtil {
     
     public static Connection createConnection() throws SQLException{
-        return DriverManager.getConnection("jdbc:sqlite:src/main/resources/planetarium.db");
+        return DriverManager.getConnection("jdbc:sqlite:src/main/resources/planetarium.db"); //tells java where to find DB
     }
 
     public static void main(String[] args) {
