@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.revature.models.Planet;
 import com.revature.utilities.ConnectionUtil;
+import com.sun.jdi.ClassNotPreparedException;
 
 public class PlanetDao {
     
@@ -47,14 +48,13 @@ public class PlanetDao {
 		}
 	}
 
-	public Planet getPlanetByName(String planetName, int oId) {
+	public Planet getPlanetByName(String planetName) {
 		// TODO: implement
 		try(Connection connection = ConnectionUtil.createConnection()){
 			//create sql query
-			String sql = "SELECT * FROM planets WHERE name = ? AND ownerId = ?";
+			String sql = "SELECT * FROM planets WHERE name = ?";
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setString(1,planetName);
-			ps.setInt(2, oId);
 
 			Planet planet = new Planet();
 			ResultSet rs = ps.executeQuery();
@@ -77,9 +77,37 @@ public class PlanetDao {
 		}
 	}
 
-	public Planet getPlanetById(int planetId) {
+	public Planet getPlanetById(int planetId, int ownerId) {
 		// TODO: implement
-		return null;
+		try(Connection connection = ConnectionUtil.createConnection())
+		{
+			String sql = "SELECT * FROM planets WHERE id = ? AND ownerId = ?";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, planetId);
+			ps.setInt(2, ownerId);
+
+			//create new planet object to then insert data from query
+			Planet planet = new Planet();
+			ResultSet rs = ps.executeQuery();
+
+			//make sure that entry is found
+			if(rs.next())
+			{
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				int oid = rs.getInt("ownerId");
+
+				planet.setId(id);
+				planet.setName(name);
+				planet.setOwnerId(oid);
+			}
+			return planet;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new Planet();
+		}
 	}
 
 	public Planet createPlanet(Planet p) {
@@ -112,9 +140,25 @@ public class PlanetDao {
 		}
 	}
 
-	public boolean deletePlanetById(int planetId) {
+	public boolean deletePlanetById(int planetId, int ownerId) {
 		// TODO: implement
-		return false;
+		try(Connection connection = ConnectionUtil.createConnection())
+		{
+			String sql = "DELETE FROM planets WHERE id = ? AND ownerId =?";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1,planetId);
+			ps.setInt(2,ownerId);
+			//use execute update as we are updating table entries
+			//note that
+			int deleted_rows = ps.executeUpdate();
+			return deleted_rows > 0;
+			//get the result set
+
+		}catch (SQLException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 

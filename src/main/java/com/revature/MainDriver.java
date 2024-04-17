@@ -38,9 +38,12 @@ public class MainDriver {
     //variable to keep track of logged  users
     public static int loggedInUserId = 0;
 
-    //keep track if user has planets/moons
+    //keep track if user has planets and moons for a given planet
     public static int numPlanets = 0;
-    public static int numMoons = 0;
+    public static int currPlanetId = 0;
+    public static int numMoonsForPlanet = 0;
+
+    public static int currMoonId = 0;
 
     public static void main(String[] args) {
         // TODO: implement main method to initialize layers and run the application
@@ -111,9 +114,10 @@ public class MainDriver {
                         System.out.println("Enter 2 to add a new planet to your planetarium");
                         System.out.println("Enter 3 to remove a planet from your planetarium");
                         System.out.println("Enter 4 to view a specific planet's moon(s)");
-                        System.out.println("Enter 5 to create a moon for a specific planet");
-                        System.out.println("Enter 6 to delete a moon for a specific planet");
-                        System.out.println("Or enter 7 to logout");
+                        System.out.println("Enter 5 to view all of your moon(s)");
+                        System.out.println("Enter 6 to create a moon for a specific planet");
+                        System.out.println("Enter 7 to delete a moon for a specific planet");
+                        System.out.println("Or enter 8 to logout");
                         int choice = s.nextInt();
                         //.nextInt() only reads the integer, not the new line character that follows when hitting
                         //enter. Need to add .nextLine() to read the pending new line character
@@ -122,26 +126,104 @@ public class MainDriver {
                         System.out.println("\n");
                         //use switch to toggle choices
                         if(choice == 1) {
-                            System.out.print("You choose to view a planet by a given name, whats the name: ");
+                            System.out.print("You choose to view your planets!");
                             planetController.getAllPlanets(loggedInUserId);
+                            System.out.println();
                         }
-                        if(choice == 2) {
+                        else if(choice == 2) {
                             System.out.println("You chose to add a planet to your planetarium!");
-                            System.out.print("Now, whats the name of the new planet? ");
+                            System.out.print("Now, whats the name of the new planet, remember it needs to be unique? ");
                             String newPlanetName = s.nextLine();
                             Planet planet = new Planet();
                             planet.setName(newPlanetName);
                             planetController.createPlanet(loggedInUserId, planet);
                         }
-                        if(choice ==3) {
-                            System.out.print("You chose to remove a planet from your planetarium, whats the name of the planet you wanted to remove: ");
-                            String name = s.nextLine();
-                            ///need the id of the planet in order to delete it
+                        else if(choice == 3) {
+                            //first check that user has planets before prompting for removal
+                            if(numPlanets > 0) {
+                                System.out.print("You chose to remove a planet from your planetarium, whats the name of the planet you wanted to remove: ");
+                                String name = s.nextLine();
+                                ///need the id of the planet in order to delete it
+                                planetController.getPlanetByName(loggedInUserId, name);
+                                //also need to check if planet has moons before deleting it
+                                //by calling moonController
+                                moonController.getPlanetMoons(currPlanetId);
+                                if(numMoonsForPlanet == 0)
+                                {
+                                    planetController.deletePlanet(loggedInUserId, currPlanetId);
+                                }
+                                else System.out.format("%s has %d moon(s), delete those moons before deleting %s from your planetarium\n\n", name, numMoonsForPlanet, name);
+                            }
+                            else System.out.println("You do not have any planets to remove!");
 
                         }
+                        else if(choice == 4)
+                        {
+                            System.out.println("You chose to view a specific planet's moon!");
+                            System.out.print("Enter the name of the planet: ");
+                            String name = s.nextLine();
+                            //update current planet id using controller method
+                            planetController.getPlanetByName(loggedInUserId, name);
+                            //now we can call controller to get moons
+                            moonController.getPlanetMoons(currPlanetId);
+                        }
+
+                        else if(choice == 5)
+                        {
+                            System.out.println("You choose to view all of your moons!");
+                            System.out.println("Here they are: ");
+                            moonController.getAllMoons(loggedInUserId);
+                        }
+
+                        else if(choice == 6)
+                        {
+                            System.out.println("You choose to create a moon!");
+                            System.out.print("Whats the name of the planet that your new moon will orbit: ");
+                            String planetName = s.nextLine();
+                            System.out.print("Whats the name of the new moon: ");
+                            String moonName = s.nextLine();
+
+                            //update current planet id
+                            planetController.getPlanetByName(loggedInUserId, planetName);
+                            //make sure given planet actually exists
+                            if(currPlanetId != 0) {
+                                //now create a moon for that planet if it exists
+                                Moon moon = new Moon();
+                                moon.setName(moonName);
+                                moonController.createMoon(loggedInUserId, moon);
+                            }
+                        }
+
+                        else if(choice == 7)
+                        {
+                            System.out.println("You chose to delete a moon!");
+                            //remind user of the moons they have for a given planet
+                            System.out.print("Whats the name of the planet that the moon orbits: ");
+                            String planetName = s.nextLine();
+                            planetController.getPlanetByName(loggedInUserId, planetName);
+                            //make sure that there are moons in the given planet and it exists
+                            if(currPlanetId != 0) {
+                                //make sure there are moons for that planet
+                                if(numMoonsForPlanet != 0)
+                                {
+                                    moonController.getPlanetMoons(currPlanetId);
+                                    System.out.print("Now which moon did you want to delete, please enter its id: ");
+                                    int moonId = s.nextInt();
+                                    s.nextLine();
+                                    moonController.deleteMoon(moonId);
+
+                                }
+                            }
+                        }
+                        else if(choice == 8)
+                        {
+                            System.out.println("You choose to logout, please come back soon! ");
+                            usrController.logout();
+                            logged = false;
+                        }
+                        else System.out.println("Please enter a valid choice...");
+
                     }
-
-
 
                 }
                 else if(resp.equals("q"))

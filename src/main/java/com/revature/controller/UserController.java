@@ -42,7 +42,12 @@ public class UserController {
 	}
 
 	public void logout() {
-		// TODO: implement
+		//reset all variable variables from Main
+		MainDriver.loggedInUserId = 0;
+		MainDriver.numPlanets = 0;
+		MainDriver.currPlanetId = 0;
+		MainDriver.numMoonsForPlanet = 0;
+		MainDriver.currMoonId = 0;
 
 	}
 

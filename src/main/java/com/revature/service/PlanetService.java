@@ -22,12 +22,13 @@ public class PlanetService {
 	public Planet getPlanetByName(int ownerId, String planetName) {
 		// TODO Auto-generated method stub
 
-		return dao.getPlanetByName(planetName, ownerId);
+		return dao.getPlanetByName(planetName);
 	}
 
 	public Planet getPlanetById(int ownerId, int planetId) {
 		// TODO Auto-generated method stub
-		return null;
+		Planet p = dao.getPlanetById(planetId,ownerId);
+		return p;
 	}
 
 	public Planet createPlanet(int ownerId, Planet planet) {
@@ -36,7 +37,7 @@ public class PlanetService {
 		if(planet.getName().length() <= 30)
 		{
 			//check if planet name exists
-			Planet planetDup = dao.getPlanetByName(planet.getName(), ownerId);
+			Planet planetDup = dao.getPlanetByName(planet.getName());
 			//if returned object is null, then something went wrong with the request
 			if(planetDup != null)
 			{
@@ -57,8 +58,8 @@ public class PlanetService {
 		return new Planet();
 	}
 
-	public boolean deletePlanetById(int planetId) {
+	public boolean deletePlanetById(int planetId, int ownerId) {
 		// TODO Auto-generated method stub
-		return false;
+		return dao.deletePlanetById(planetId, ownerId);
 	}
 }
