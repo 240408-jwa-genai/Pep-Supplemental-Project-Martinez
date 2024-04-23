@@ -211,13 +211,12 @@ public class MainDriver {
                                     int moonId = s.nextInt();
                                     s.nextLine();
                                     moonController.deleteMoon(moonId);
-
                                 }
                             }
                         }
                         else if(choice == 8)
                         {
-                            System.out.println("You choose to logout, please come back soon! ");
+                            System.out.println("You chose to logout, please come back soon! ");
                             usrController.logout();
                             logged = false;
                         }

@@ -15,12 +15,12 @@ public class PlanetService {
 	}
 
 	public List<Planet> getAllPlanets(int userId) {
-		// TODO Auto-generated method stub
+
 		return dao.getAllPlanets(userId);
 	}
 
 	public Planet getPlanetByName(int ownerId, String planetName) {
-		// TODO Auto-generated method stub
+
 
 		return dao.getPlanetByName(planetName);
 	}

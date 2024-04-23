@@ -21,7 +21,7 @@ public class MoonService {
 
 	public Moon getMoonByName(int myPlanetId, String moonName) {
 		// TODO implement
-		return null;
+		return dao.getMoonByName(moonName);
 	}
 
 	public Moon getMoonById(int myPlanetId, int moonId) {

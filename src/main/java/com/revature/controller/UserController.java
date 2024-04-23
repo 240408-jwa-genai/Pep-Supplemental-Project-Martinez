@@ -51,10 +51,11 @@ public class UserController {
 
 	}
 
-	//method could be used to check if user is authorized to add/remove
-	//planets/moons to their planetarium, meaning check if they own it
-	public boolean checkAuthorization(int userId) {	
-		// TODO: implement
+	//get the sample methods
+	public boolean checkAuthorization(int userId) {
+		UsernamePasswordAuthentication obj = new UsernamePasswordAuthentication();
+
 		return false;
 	}
+
 }

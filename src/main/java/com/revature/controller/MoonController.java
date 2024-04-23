@@ -34,8 +34,11 @@ public class MoonController {
 		System.out.println();
 	}
 
-	public void getMoonByName(int currentUserId, String name) {
+	public void getMoonByName(int planetId, String name) {
 		// TODO: implement
+		Moon moon = moonService.getMoonByName(planetId, name);
+		if(moon.getId() != 0) System.out.format("Here is your moon %s, it has an id of %d\n", name, moon.getId());
+		else System.out.format("Something went wrong when trying to find %s...\n", name);
 	}
 
 	public void getMoonById(int currentUserId, int id) {
