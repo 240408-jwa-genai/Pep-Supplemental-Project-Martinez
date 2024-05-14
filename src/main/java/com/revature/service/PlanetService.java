@@ -52,9 +52,7 @@ public class PlanetService {
 					return dao.createPlanet(planet);
 				}
 			}
-
 		}
-
 		return new Planet();
 	}
 

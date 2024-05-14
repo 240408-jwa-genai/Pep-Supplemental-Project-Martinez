@@ -21,10 +21,12 @@ public class UserController {
 		{
 			MainDriver.loggedInUserId = usr.getId();
 			System.out.println(String.format("Hello %s! Welcome back\n",usr.getUsername()));
+			MainDriver.logged = true;
 		}
 		else
 		{
 			System.out.println("Bad login. please try again");
+			MainDriver.logged = false;
 		}
 
 	}

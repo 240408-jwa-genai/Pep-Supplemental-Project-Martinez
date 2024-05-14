@@ -44,6 +44,7 @@ public class MainDriver {
     public static int numMoonsForPlanet = 0;
 
     public static int currMoonId = 0;
+    public static boolean logged = true;
 
     public static void main(String[] args) {
         // TODO: implement main method to initialize layers and run the application
@@ -98,7 +99,6 @@ public class MainDriver {
                     //check if user has any planetarium by checking if any planets
 
                     //infinite loop until logged user decides to quit
-                    boolean logged = true;
                     //once logged, display planets of user if they have
                     //only need to do this once, we can use boolean to do so
                     boolean first_iter = true;
@@ -132,7 +132,7 @@ public class MainDriver {
                         }
                         else if(choice == 2) {
                             System.out.println("You chose to add a planet to your planetarium!");
-                            System.out.print("Now, whats the name of the new planet, remember it needs to be unique? ");
+                            System.out.print("Now, whats the name of the new planet, remember it needs to be unique: ");
                             String newPlanetName = s.nextLine();
                             Planet planet = new Planet();
                             planet.setName(newPlanetName);
